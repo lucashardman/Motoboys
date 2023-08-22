@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Loja(BaseModel):
@@ -14,6 +15,6 @@ class Pedido(BaseModel):
 
 class Motoboy(BaseModel):
     nome: str
-    exclusividade: list[Loja]
     precoFixo: float
     pedidos: list[Pedido]
+    exclusividade: Optional[Loja] = None

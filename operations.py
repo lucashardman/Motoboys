@@ -1,7 +1,36 @@
 from models import schemas
+import itertools
+
+
+def atribuir_pedidos(
+        pedidos: list[schemas.Pedido],
+        motoboys: list[schemas.Motoboy]
+    ) -> list[schemas.Motoboy]:
+
+    motoboys = sorted(
+        motoboys, 
+        key=lambda motoboy: motoboy.exclusividade is not None, 
+        reverse=True
+    )
+
+    iter_motoboys = itertools.cycle(motoboys)
+
+    for pedido in pedidos:
+
+        motoboy = next(iter_motoboys)
+        loja_exclusiva = False
+
+        if motoboy.exclusividade == pedido.loja:
+            motoboy.pedidos.append(pedido)
+            loja_exclusiva = True
+        if not loja_exclusiva and not motoboy.exclusividade:
+            motoboy.pedidos.append(pedido) 
+
+    return motoboys
 
 
 def get_lojas() -> list[schemas.Loja]:
+    
     return [
         schemas.Loja(
             nome="Loja1",
@@ -19,34 +48,31 @@ def get_lojas() -> list[schemas.Loja]:
 
 
 def get_motoboys(lojas: list[schemas.Loja]) -> list[schemas.Motoboy]:
+
     return [
         schemas.Motoboy(
             nome="Moto1",
-            exclusividade=[],
             precoFixo=2.0,
             pedidos=[]
         ),
         schemas.Motoboy(
             nome="Moto2",
-            exclusividade=[],
             precoFixo=2.0,
             pedidos=[]
         ),
         schemas.Motoboy(
             nome="Moto3",
-            exclusividade=[],
             precoFixo=2.0,
             pedidos=[]
         ),
         schemas.Motoboy(
             nome="Moto4",
-            exclusividade=[loja for loja in lojas if loja.nome == "Loja1"],
+            exclusividade=[loja for loja in lojas if loja.nome == "Loja1"][0],
             precoFixo=2.0,
             pedidos=[]
         ),
         schemas.Motoboy(
             nome="Moto5",
-            exclusividade=[],
             precoFixo=3.0,
             pedidos=[]
         )
@@ -54,6 +80,7 @@ def get_motoboys(lojas: list[schemas.Loja]) -> list[schemas.Motoboy]:
 
 
 def get_pedidos(lojas: list[schemas.Loja]) -> list[schemas.Pedido]:
+
     return [
         schemas.Pedido(
             nome="Pedido1",
