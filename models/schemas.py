@@ -1,10 +1,4 @@
 from pydantic import BaseModel
-from typing import Optional
-
-class Motoboy(BaseModel):
-    nome: str
-    exclusividade: list[str]
-    precoFixo: float
 
 
 class Loja(BaseModel):
@@ -16,4 +10,10 @@ class Pedido(BaseModel):
     nome: str
     preco: float
     loja: Loja
-    motoboy: Motoboy
+
+
+class Motoboy(BaseModel):
+    nome: str
+    exclusividade: list[Loja]
+    precoFixo: float
+    pedidos: list[Pedido]
