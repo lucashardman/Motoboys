@@ -12,12 +12,14 @@ def _resultado_pesquisa(motoboys: list[schemas.Motoboy]) -> None:
         print(f"Nome: {motoboy.nome}")
         preco_final = motoboy.precoFixo
         lojas = []
+        print(', '.join([pedido.nome for pedido in motoboy.pedidos]))
         for pedido in motoboy.pedidos:
             preco_final += pedido.preco * pedido.loja.comissao
             lojas.append(pedido.loja.nome)
         print(f"Total de pedidos: {len(motoboy.pedidos)}")
         print(f"Lojas dos pedidos: {', '.join(lojas)}")
         print(f"Recebimento total: R${'{:.2f}'.format(preco_final)}")
+        
 
 def pesquisa(motoboys: list[schemas.Motoboy]) -> None:
 
@@ -45,15 +47,15 @@ def atribuir_pedidos(
     iter_motoboys = itertools.cycle(motoboys)
 
     for pedido in pedidos:
-
-        motoboy = next(iter_motoboys)
-        loja_exclusiva = False
-
-        if motoboy.exclusividade == pedido.loja:
-            motoboy.pedidos.append(pedido)
-            loja_exclusiva = True
-        if not loja_exclusiva and not motoboy.exclusividade:
-            motoboy.pedidos.append(pedido) 
+        atribuido = False
+        while atribuido is not True:
+            motoboy = next(iter_motoboys)
+            if motoboy.exclusividade == pedido.loja:
+                motoboy.pedidos.append(pedido)
+                atribuido = True
+            elif not motoboy.exclusividade:
+                motoboy.pedidos.append(pedido) 
+                atribuido = True
 
     return motoboys
 
