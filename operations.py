@@ -1,8 +1,9 @@
-from models import schemas
+from models.schemas import Motoboy, Pedido, Loja
+from typing import Iterable
 import itertools
 
 
-def _resultado_pesquisa(motoboys: list[schemas.Motoboy]) -> None:
+def _resultado_pesquisa(motoboys: list[Motoboy]) -> None:
 
     if len(motoboys) == 0:
         print("Motoboy não cadastrado.")
@@ -10,8 +11,8 @@ def _resultado_pesquisa(motoboys: list[schemas.Motoboy]) -> None:
     
     for motoboy in motoboys:
         print(f"Nome: {motoboy.nome}")
-        preco_final = motoboy.precoFixo
-        lojas = []
+        preco_final: float = motoboy.precoFixo
+        lojas: list[str] = []
         for pedido in motoboy.pedidos:
             preco_final += pedido.preco * pedido.loja.comissao
             lojas.append(pedido.loja.nome)
@@ -20,9 +21,9 @@ def _resultado_pesquisa(motoboys: list[schemas.Motoboy]) -> None:
         print(f"Recebimento total: R${'{:.2f}'.format(preco_final)}")
         
 
-def pesquisa(motoboys: list[schemas.Motoboy]) -> None:
+def pesquisa(motoboys: list[Motoboy]) -> None:
 
-    pesquisa = input("Digite o nome do motoboy: ")
+    pesquisa: str = input("Digite o nome do motoboy: ")
     if pesquisa == "":
         _resultado_pesquisa(motoboys=motoboys)
     elif pesquisa not in [motoboy.nome for motoboy in motoboys]:
@@ -33,9 +34,9 @@ def pesquisa(motoboys: list[schemas.Motoboy]) -> None:
 
 
 def atribuir_pedidos(
-        pedidos: list[schemas.Pedido],
-        motoboys: list[schemas.Motoboy]
-    ) -> list[schemas.Motoboy]:
+        pedidos: list[Pedido],
+        motoboys: list[Motoboy]
+    ) -> list[Motoboy]:
 
     motoboys = sorted(
         motoboys, 
@@ -43,10 +44,10 @@ def atribuir_pedidos(
         reverse=True
     )
 
-    iter_motoboys = itertools.cycle(motoboys)
+    iter_motoboys: Iterable[Motoboy] = itertools.cycle(motoboys)
 
     for pedido in pedidos:
-        atribuido = False
+        atribuido: bool = False
         while atribuido is not True:
             motoboy = next(iter_motoboys)
             if motoboy.exclusividade == pedido.loja:
@@ -59,49 +60,49 @@ def atribuir_pedidos(
     return motoboys
 
 
-def get_lojas() -> list[schemas.Loja]:
+def get_lojas() -> list[Loja]:
 
     return [
-        schemas.Loja(
+        Loja(
             nome="Loja1",
             comissao=0.05
         ),
-        schemas.Loja(
+        Loja(
             nome="Loja2",
             comissao=0.05
         ),
-        schemas.Loja(
+        Loja(
             nome="Loja3",
             comissao=0.15
         )
     ]
 
 
-def get_motoboys(lojas: list[schemas.Loja]) -> list[schemas.Motoboy]:
+def get_motoboys(lojas: list[Loja]) -> list[Motoboy]:
 
     return [
-        schemas.Motoboy(
+        Motoboy(
             nome="Moto1",
             precoFixo=2.0,
             pedidos=[]
         ),
-        schemas.Motoboy(
+        Motoboy(
             nome="Moto2",
             precoFixo=2.0,
             pedidos=[]
         ),
-        schemas.Motoboy(
+        Motoboy(
             nome="Moto3",
             precoFixo=2.0,
             pedidos=[]
         ),
-        schemas.Motoboy(
+        Motoboy(
             nome="Moto4",
             exclusividade=[loja for loja in lojas if loja.nome == "Loja1"][0],
             precoFixo=2.0,
             pedidos=[]
         ),
-        schemas.Motoboy(
+        Motoboy(
             nome="Moto5",
             precoFixo=3.0,
             pedidos=[]
@@ -109,55 +110,55 @@ def get_motoboys(lojas: list[schemas.Loja]) -> list[schemas.Motoboy]:
     ]
 
 
-def get_pedidos(lojas: list[schemas.Loja]) -> list[schemas.Pedido]:
+def get_pedidos(lojas: list[Loja]) -> list[Pedido]:
 
     return [
-        schemas.Pedido(
+        Pedido(
             nome="Pedido1",
             preco=50.00,
             loja=[loja for loja in lojas if loja.nome == "Loja1"][0]
         ),
-        schemas.Pedido(
+        Pedido(
             nome="Pedido2",
             preco=50.00,
             loja=[loja for loja in lojas if loja.nome == "Loja1"][0]
         ),
-        schemas.Pedido(
+        Pedido(
             nome="Pedido3",
             preco=50.00,
             loja=[loja for loja in lojas if loja.nome == "Loja1"][0]
         ),
-        schemas.Pedido(
+        Pedido(
             nome="Pedido4",
             preco=50.00,
             loja=[loja for loja in lojas if loja.nome == "Loja2"][0]
         ),
-        schemas.Pedido(
+        Pedido(
             nome="Pedido5",
             preco=50.00,
             loja=[loja for loja in lojas if loja.nome == "Loja2"][0]
         ),
-        schemas.Pedido(
+        Pedido(
             nome="Pedido6",
             preco=50.00,
             loja=[loja for loja in lojas if loja.nome == "Loja2"][0]
         ),
-        schemas.Pedido(
+        Pedido(
             nome="Pedido7",
             preco=50.00,
             loja=[loja for loja in lojas if loja.nome == "Loja2"][0]
         ),
-        schemas.Pedido(
+        Pedido(
             nome="Pedido8",
             preco=50.00,
             loja=[loja for loja in lojas if loja.nome == "Loja3"][0]
         ),
-        schemas.Pedido(
+        Pedido(
             nome="Pedido9",
             preco=50.00,
             loja=[loja for loja in lojas if loja.nome == "Loja3"][0]
         ),
-        schemas.Pedido(
+        Pedido(
             nome="Pedido10",
             preco=100.00,
             loja=[loja for loja in lojas if loja.nome == "Loja3"][0]
