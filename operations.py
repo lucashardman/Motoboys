@@ -12,7 +12,6 @@ def _resultado_pesquisa(motoboys: list[schemas.Motoboy]) -> None:
         print(f"Nome: {motoboy.nome}")
         preco_final = motoboy.precoFixo
         lojas = []
-        print(', '.join([pedido.nome for pedido in motoboy.pedidos]))
         for pedido in motoboy.pedidos:
             preco_final += pedido.preco * pedido.loja.comissao
             lojas.append(pedido.loja.nome)
