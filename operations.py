@@ -2,6 +2,35 @@ from models import schemas
 import itertools
 
 
+def _resultado_pesquisa(motoboys: list[schemas.Motoboy]) -> None:
+
+    if len(motoboys) == 0:
+        print("Motoboy não cadastrado.")
+        return
+    
+    for motoboy in motoboys:
+        print(f"Nome: {motoboy.nome}")
+        preco_final = motoboy.precoFixo
+        lojas = []
+        for pedido in motoboy.pedidos:
+            preco_final += pedido.preco * pedido.loja.comissao
+            lojas.append(pedido.loja.nome)
+        print(f"Total de pedidos: {len(motoboy.pedidos)}")
+        print(f"Lojas dos pedidos: {', '.join(lojas)}")
+        print(f"Recebimento total: R${'{:.2f}'.format(preco_final)}")
+
+def pesquisa(motoboys: list[schemas.Motoboy]) -> None:
+
+    pesquisa = input("Digite o nome do motoboy: ")
+    if pesquisa == "":
+        _resultado_pesquisa(motoboys=motoboys)
+    elif pesquisa not in [motoboy.nome for motoboy in motoboys]:
+        _resultado_pesquisa(motoboys=[])
+    else:
+        motoboy = [motoboy for motoboy in motoboys if motoboy.nome == pesquisa]
+        _resultado_pesquisa(motoboys=motoboy)
+
+
 def atribuir_pedidos(
         pedidos: list[schemas.Pedido],
         motoboys: list[schemas.Motoboy]
@@ -30,7 +59,7 @@ def atribuir_pedidos(
 
 
 def get_lojas() -> list[schemas.Loja]:
-    
+
     return [
         schemas.Loja(
             nome="Loja1",

@@ -1,4 +1,4 @@
-from operations import get_motoboys, get_lojas, get_pedidos, atribuir_pedidos
+from operations import get_motoboys, get_lojas, get_pedidos, atribuir_pedidos, pesquisa
 
 
 def main():
@@ -8,9 +8,8 @@ def main():
     pedidos = get_pedidos(lojas=lojas)
     motoboys = atribuir_pedidos(pedidos=pedidos, motoboys=motoboys)
 
-    for motoboy in motoboys:
-        print(motoboy)
+    pesquisa(motoboys=motoboys)
+
 
 if __name__ == "__main__":
-    
     main()
